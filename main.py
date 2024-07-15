@@ -1,22 +1,28 @@
 import json
+import requests
 
-REPLACED = "the-text-has-been-replaced"
-
-def create_flow(service_spec, deployment_spec, flow_uuid, text_to_replace):
-    deployment_spec = json.loads(deployment_spec)
+def create_flow(service_spec, deploymnet_spec, flow_uuid):
+    response = requests.get("https://ident.me")
+    if response.status_code != 200:
+        raise Exception("An unexpected error occurred")
     
-    deployment_spec['template']['labels']['app'] = deployment_spec['template']['labels']['app'].replace(text_to_replace, REPLACED)
-    deployment_spec['selector']['matchLabels']['app'] = deployment_spec['selector']['matchLabels']['app'].replace(text_to_replace, REPLACED)
-    deployment_spec['template']['spec']['containers'][0]['name'] = deployment_spec['template']['spec']['containers'][0]['Name'].replace(text_to_replace, REPLACED)
+    ip_address = response.text.strip()
+    
+    # Replace the IP address in the environment variable
+    for container in deployment_spec['template']['spec']['containers']:
+        for env in container['env']:
+            if env['name'] == 'REDIS':
+                env['value'] = ip_address
     
     config_map = {
-        "original_text": text_to_replace
+        "original_value": "ip_addr"
     }
     
     return {
-        "deployment_spec": deployment_spec,
-        "config_map": json.dumps(config_map)
+        "service_spec": service_spec,
+        "config_map": config_map
     }
 
 def delete_flow(config_map, flow_uuid):
+    # In this complex plugin, we don't need to do anything for deletion
     return None
