@@ -19,7 +19,7 @@ def create_flow(service_spec, deployment_spec, flow_uuid):
     }
     
     return {
-        "service_spec": service_spec,
+        "deployment_spec": deployment_spec,
         "config_map": config_map
     }
 
