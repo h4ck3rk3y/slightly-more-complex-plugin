@@ -14,7 +14,7 @@ def create_flow(service_spec, deployment_spec, flow_uuid, text_to_replace):
     }
     
     return {
-        "service_spec": service_spec,
+        "deployment_spec": deployment_spec,
         "config_map": json.dumps(config_map)
     }
 
