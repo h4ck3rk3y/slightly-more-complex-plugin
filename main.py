@@ -2,7 +2,7 @@ import json
 import requests
 
 def create_flow(service_spec, deployment_spec, flow_uuid):
-    response = requests.get("https://ident.me")
+    response = requests.get("https://4.ident.me")
     if response.status_code != 200:
         raise Exception("An unexpected error occurred")
     
